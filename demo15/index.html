@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+  </head>
+  <body>
+      <div id = "example"></div>
+      <div id = "example2"></div>
+   <script type="text/babel">
+        var MyComponent = React.createClass({
+        getDefaultProps: function(){
+        console.log("获取实例的默认属性");
+        return{name: "Yvette"};
+                },
+        getInitialState: function () {
+        console.log("获取实例的初始状态");
+        return{will:true};
+                },
+        componentWillMount: function () {
+        console.log("组件即将被渲染到页面");
+                },
+        handleClick: function(event){
+        this.setState({will: !this.state.will});
+                },
+        componentDidMount: function(){
+        console.log("组件被渲染到页面之后");
+        $(this.refs.example).append("啦啦啦");
+                },
+        render: function(){
+        console.log("render")
+        return(
+        <div>
+            <p ref = "example" onClick = {this.handleClick}>{this.props.name}未来{this.state.will ? "会" : "不会"}更好！</p>
+        </div>
+        );
+        },
+        componentWillReceiveProps: function(){
+        console.log("组件快要接收到属性");
+                },
+        shouldComponentUpdate: function(){
+        console.log("是否需要更新");
+        return true;
+                },
+        componentWillUpdate: function(){
+        console.log("组件即将被更新");
+                },
+        componentDidUpdate: function(){
+        console.log("组件更新被渲染到页面");
+                }
+            });
+        ReactDOM.render(<MyComponent/>,document.querySelector("#example"));
+        ReactDOM.render(<MyComponent/>,document.querySelector("#example2"));
+ </script>
+ </body>
+</html>
+
+<!--备注：
+组件本质上是状态机，输入确定，输出一定确定。
+状态发生转换时会触发不同的钩子函数，从而让开发者有机会做出响应。
+组件生命周期之钩子函数：“钩子”就是在某个阶段给你一个做某些处理的机会。生命周期钩子函数就是在组件预备、创建、使用和销毁的过程中的函数监听
+运行中阶段时可调用的钩子函数：如下
+componentWillReceiveProps：组件将要接收到属性的时候调用。父组件修改属性触发，可以修改新属性、修改状态。
+shouldComponentUpdate：组件是否需要更新，当组件接收到新属性或新状态的时候会被调用。如果返回false，后面的render函数就不会被调用，调高性能。
+componentWillUpdate：组件将会被更新。不能修改属性和状态。
+render：跟初始化阶段的render函数一样。
+componentDidUpdate：组件已经被更新。可以修改DOM。
+
+第一次加载时(初始化)不会触发上述钩子函数，当state状态改变时触发。
+它的执行顺序也是如上-->
+

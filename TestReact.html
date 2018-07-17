@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>react</title>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel"></script>
+var UserGist = React.createClass({
+getInitialState:fuction(){                //设置初始状态
+return{
+username: '',
+lastGistUrl: ''
+};
+},
+componentDidMount:function(){                       //React 组件的数据可以通过 componentDidMount 方法中的 Ajax 来获取
+$.get(this.props.source,function(result){                  //显示source页面的返回值   props显示静态的状态
+var lastGist = result[0];
+this.setState({                               //设置状态
+username: lastGist.owner.login,
+lastGistUrl: lastGist.html_url
+});
+}.bind(this));                      //绑定当前函数
+},
+render: function() {
+return (
+<div>
+    {this.state.username}'s last gist is <a href={this.state.lastGistUrl}>here</a>.
+</div>
+);
+}
+});
+ReactDOM.render(
+<UserGist source="https://api.github.com/users/octocat/gists" />,
+document.getElementById('example')
+);
+</body>
+</html>
