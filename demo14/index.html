@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+  </head>
+  <body>
+      <div id = "example"></div>
+      <div id = "example2"></div>
+   <script type="text/babel">
+    var MyComponent = React.createClass({
+        getDefaultProps: function(){
+            console.log("获取实例的默认属性");
+            return{name: "Yvette"};
+        },
+        getInitialState: function () {
+            console.log("获取实例的初始状态");
+            return{will:true};
+        },
+        componentWillMount: function () {
+            console.log("组件即将被渲染到页面");
+        },
+        handleClick: function(event){
+            this.setState({will: !this.state.will});
+        },
+        componentDidMount: function(){
+            console.log("组件已经被渲染");
+            if(this.state.will){
+                $(this.refs.example).append("啦啦啦");
+            }else{
+                $(this.refs.example).append("郁闷");
+            }
+        },
+        render: function(){
+            console.log("render");
+            return(
+                <div>
+                <p ref = "example" onClick = {this.handleClick}>{this.props.name}未来{this.state.will ? "会" : "不会"}更好！</p>
+            </div>
+            )
+        }
+    });
+    ReactDOM.render(<MyComponent/>,document.querySelector("#example"));
+    ReactDOM.render(<MyComponent/>,document.querySelector("#example2"));
+</script> 
+  </body>
+</html>
+
+<!--备注：
+组件本质上是状态机，输入确定，输出一定确定。
+状态发生转换时会触发不同的钩子函数，从而让开发者有机会做出响应。
+组件生命周期之钩子函数：“钩子”就是在某个阶段给你一个做某些处理的机会。生命周期钩子函数就是在组件预备、创建、使用和销毁的过程中的函数监听
+初始化状态时可调用的钩子函数：如下
+getDefaultProps:设置props的初始值,只会调用一次。
+组件生命周期之实例化操作：getInitialState,componentWillMount,render,componentDidMount,
+执行顺序如上
+每当组件被调用时，都会触发实例化函数如上,上触发了2次(example,example2)
+每当this.setState触发时，都会调用render函数，而不会去调用组件的其他实例化操作。所以上代码中’郁闷‘是不会被append。
+-->
+

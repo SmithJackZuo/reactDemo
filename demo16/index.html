@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+  </head>
+  <body>
+      <div id = "root"></div>
+   <script type="text/babel">
+    var style = {
+        color: "red",
+        border: "1px solid #000"
+    };
+    var HelloWorld = React.createClass({
+    render: function () {
+      console.log("render 4");
+        return <p ref="childp">Hello, {this.props.name ? this.props.name : "World"}</p>;
+    },
+    componentWillUnmount:function(){
+      console.log("B000000000000000000000M!");
+    },
+    });
+    var HelloUniverse = React.createClass({
+    getInitialState:function(){
+        return {name:''}
+    },
+    handleChange:function(event){
+        this.setState({name:event.target.value});
+    },
+    render:function(){
+        if (this.state.name == "123") {
+        return (<div>123</div>)
+        }
+        return(
+        <div>
+        <HelloWorld name={this.state.name}></HelloWorld>
+        <br/>
+        <input type="text" onChange={this.handleChange}/>
+        </div>
+        )
+        
+    }
+    });
+    
+    ReactDOM.render(
+    <div style={style}><HelloUniverse></HelloUniverse></div>,
+    document.getElementById('root')
+    );
+</script>
+ </body>
+</html>
+
+<!--备注：
+组件本质上是状态机，输入确定，输出一定确定。
+状态发生转换时会触发不同的钩子函数，从而让开发者有机会做出响应。
+组件生命周期之钩子函数：“钩子”就是在某个阶段给你一个做某些处理的机会。生命周期钩子函数就是在组件预备、创建、使用和销毁的过程中的函数监听
+销毁中阶段时可调用的钩子函数：如下
+componentWillUnmount：销毁前调用-->
+
+
